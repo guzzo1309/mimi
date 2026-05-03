@@ -9,11 +9,20 @@ html {
   scroll-behavior: smooth;
 }
 
+html.boot-lock,
+html.boot-lock body {
+  overflow: hidden !important;
+  overscroll-behavior: none;
+  touch-action: none;
+  height: 100%;
+}
+
 body {
   margin: 0;
   min-height: 100dvh;
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 #root {
@@ -32,3 +41,4 @@ body {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 999px;
 }
+

@@ -1,5 +1,4 @@
 import { intervalToDuration } from 'date-fns'
-import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { RELATIONSHIP_START, relationshipStartLabel } from '../config/site'
 
@@ -32,11 +31,11 @@ function Unit({
   value: number
 }) {
   return (
-    <div className="flex min-w-[4.5rem] flex-col items-center rounded-2xl border border-white/10 bg-white/5 px-3 py-4 backdrop-blur-md sm:min-w-[5.5rem] sm:px-4">
-      <span className="font-mono text-2xl font-semibold tabular-nums text-white sm:text-3xl">
+    <div className="flex min-w-0 flex-1 flex-col items-center justify-center rounded-xl border border-white/10 bg-white/10 px-0.5 py-2.5 sm:rounded-2xl sm:bg-white/5 sm:px-2 sm:py-4 md:px-3">
+      <span className="font-mono text-[clamp(0.95rem,4.8vw,1.75rem)] font-semibold tabular-nums leading-none text-white sm:text-2xl md:text-3xl">
         {value}
       </span>
-      <span className="mt-1 text-[10px] font-medium uppercase tracking-wider text-stone-400 sm:text-xs">
+      <span className="mt-1 max-w-full text-center text-[8px] font-medium uppercase leading-tight tracking-tight text-stone-400 sm:text-[10px] sm:tracking-wider md:text-xs">
         {label}
       </span>
     </div>
@@ -56,35 +55,25 @@ export function TogetherCounter() {
   return (
     <footer className="relative bg-linear-to-b from-stone-950 to-black pb-16 pt-12">
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center"
-        >
+        <div className="text-center">
           <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">
             Llevamos exactamente…
           </h2>
-          <p className="mt-2 text-sm text-stone-500">
+          <p className="mt-2 px-1 text-sm text-balance text-stone-500">
             Desde {relationshipStartLabel()}
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div
-          className="mt-10 flex flex-wrap justify-center gap-2 sm:gap-3"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-        >
+        <div className="mx-auto mt-10 flex w-full max-w-4xl flex-nowrap items-stretch justify-center gap-1 sm:gap-2.5 md:gap-3">
           <Unit label="Años" value={parts.years} />
           <Unit label="Meses" value={parts.months} />
           <Unit label="Días" value={parts.days} />
           <Unit label="Horas" value={parts.hours} />
           <Unit label="Min" value={parts.minutes} />
           <Unit label="Seg" value={parts.seconds} />
-        </motion.div>
+        </div>
 
-        <p className="mt-10 text-center font-display text-sm italic text-stone-500">
+        <p className="mt-10 px-2 text-center font-display text-sm text-balance italic text-stone-500">
           Cada segundo desde ese 4 de abril a las 12:27. Gracias por este tiempo.
         </p>
       </div>

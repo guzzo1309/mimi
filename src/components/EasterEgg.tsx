@@ -49,7 +49,7 @@ export function EasterEgg() {
       <button
         type="button"
         onClick={onMonogramTap}
-        className="fixed left-4 top-4 z-30 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 font-display text-xs font-medium text-white/50 backdrop-blur-md transition hover:text-white/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-200/70"
+        className="fixed left-4 top-4 z-30 rounded-full border border-white/10 bg-stone-950/80 px-3 py-1.5 font-display text-xs font-medium text-white/50 transition hover:text-white/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-200/70"
         aria-label="Monograma — easter egg"
       >
         ♡
@@ -60,7 +60,7 @@ export function EasterEgg() {
           <motion.div
             key="easter"
             role="status"
-            className="fixed inset-x-4 bottom-24 z-40 mx-auto max-w-md rounded-2xl border border-rose-200/30 bg-stone-900/95 p-5 text-center shadow-2xl backdrop-blur-md sm:inset-x-auto"
+            className="fixed inset-x-4 bottom-24 z-40 mx-auto max-w-md rounded-2xl border border-rose-200/30 bg-stone-950 p-5 text-center shadow-2xl sm:inset-x-auto sm:bg-stone-900/95 sm:backdrop-blur-md"
             initial={{ opacity: 0, y: 16, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8 }}

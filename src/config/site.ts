@@ -34,6 +34,10 @@ export const MUSIC_URL = import.meta.env.VITE_MUSIC_URL ?? ''
 export const EASTER_EGG_MESSAGE =
   'El 4 de abril a las 12:27 no fue un error: fue la mejor versión que subí a producción. 💜'
 
+/** Frase en la pantalla de carga inicial (corazón). */
+export const BOOT_LOADER_PHRASE =
+  'Preparando cada recuerdo para ti… solo un latido más.'
+
 export type Polaroid = {
   id: string
   src: string

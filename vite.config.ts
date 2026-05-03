@@ -16,6 +16,9 @@ export default defineConfig(({ mode }) => {
       : `${base}${HERO_IMAGE_URL}`)
 
   return {
+    server: {
+      host: true,
+    },
     plugins: [
       react(),
       tailwindcss(),

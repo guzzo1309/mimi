@@ -14,37 +14,39 @@ function PolaroidCard({
   const tilt = rotationForId(item.id)
 
   return (
-    <motion.button
+    <button
       type="button"
       onClick={() => onOpen(item)}
-      initial={{ opacity: 0, y: 48, rotate: tilt + 4 }}
-      whileInView={{ opacity: 1, y: 0, rotate: tilt }}
-      viewport={{ once: true, margin: '-40px' }}
-      transition={{
-        type: 'spring',
-        stiffness: 260,
-        damping: 18,
-        mass: 0.9,
-      }}
-      whileHover={{ scale: 1.02, rotate: tilt - 1 }}
-      whileTap={{ scale: 0.98 }}
-      className="group mb-8 w-full cursor-pointer break-inside-avoid text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-300/80"
+      className="group mb-8 w-full cursor-pointer break-inside-avoid text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-300/80 motion-reduce:transition-none"
     >
-      <div className="rounded-sm bg-white p-3 pb-10 shadow-[0_18px_40px_-12px_rgba(0,0,0,0.45)] ring-1 ring-black/5 transition-shadow group-hover:shadow-[0_22px_50px_-10px_rgba(0,0,0,0.5)]">
-        <div className="overflow-hidden rounded-[2px] bg-stone-200">
-          <img
-            src={item.src}
-            alt={item.alt}
-            className="block w-full object-cover"
-            loading="lazy"
-            decoding="async"
-          />
+      {/* La rotación va en un hijo: en columnas + transform en el <button> Safari pierde los toques */}
+      <motion.div
+        initial={{ opacity: 0, y: 28, rotate: tilt + 2 }}
+        whileInView={{ opacity: 1, y: 0, rotate: tilt }}
+        viewport={{ once: true, amount: 0.12 }}
+        transition={{ duration: 0.38, ease: [0.25, 0.1, 0.25, 1] }}
+        className="w-full"
+      >
+        <div className="rounded-sm bg-white p-3 pb-10 shadow-[0_18px_40px_-12px_rgba(0,0,0,0.45)] ring-1 ring-black/5 transition-[transform,box-shadow] duration-200 ease-out group-active:scale-[0.99] motion-safe:group-hover:scale-[1.01] motion-safe:group-hover:shadow-[0_22px_50px_-10px_rgba(0,0,0,0.5)]">
+          <div className="aspect-[4/5] overflow-hidden rounded-[2px] bg-stone-200">
+            <img
+              src={item.src}
+              alt={item.alt}
+              width={480}
+              height={600}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="h-full w-full object-cover"
+              loading="lazy"
+              decoding="async"
+              fetchPriority="low"
+            />
+          </div>
+          <p className="mt-3 text-center font-display text-xs italic text-stone-500">
+            Toca para leer la dedicatoria
+          </p>
         </div>
-        <p className="mt-3 text-center font-display text-xs italic text-stone-500">
-          Toca para leer la dedicatoria
-        </p>
-      </div>
-    </motion.button>
+      </motion.div>
+    </button>
   )
 }
 
@@ -60,10 +62,10 @@ export function PolaroidGallery() {
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6">
         <motion.header
           className="mb-14 text-center"
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.35, ease: 'easeOut' }}
         >
           <h2 className="font-display text-3xl font-semibold text-white sm:text-4xl">
             Polaroids digitales
@@ -93,7 +95,7 @@ export function PolaroidGallery() {
           >
             <button
               type="button"
-              className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/80"
               aria-label="Cerrar"
               onClick={close}
             />
@@ -101,8 +103,8 @@ export function PolaroidGallery() {
               initial={{ y: 40, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 24, opacity: 0 }}
-              transition={{ type: 'spring', stiffness: 320, damping: 28 }}
-              className="relative z-10 m-4 w-full max-w-lg overflow-hidden rounded-2xl border border-white/15 bg-white/10 p-4 shadow-2xl backdrop-blur-md sm:p-6"
+              transition={{ duration: 0.32, ease: [0.25, 0.1, 0.25, 1] }}
+              className="relative z-10 mx-auto mb-[max(1rem,env(safe-area-inset-bottom))] mt-auto w-[min(100%,calc(100dvw-1rem))] max-w-lg max-h-[90dvh] overflow-y-auto overflow-x-hidden rounded-2xl border border-white/15 bg-stone-950/95 p-3 shadow-2xl sm:m-4 sm:mb-4 sm:mt-0 sm:max-h-none sm:w-full sm:overflow-visible sm:bg-white/10 sm:p-6 sm:backdrop-blur-md"
             >
               <div className="overflow-hidden rounded-lg bg-white p-2 pb-8 shadow-inner ring-1 ring-black/5">
                 <img
@@ -114,13 +116,13 @@ export function PolaroidGallery() {
               <h3 id="polaroid-dialog-title" className="sr-only">
                 {active.alt}
               </h3>
-              <p className="mt-5 font-display text-lg leading-relaxed text-white sm:text-xl">
+              <p className="mt-4 font-display text-base leading-relaxed text-pretty text-white sm:mt-5 sm:text-lg md:text-xl">
                 {active.reason}
               </p>
               <button
                 type="button"
                 onClick={close}
-                className="mt-6 w-full rounded-xl border border-white/20 bg-white/10 py-3 text-sm font-medium text-white backdrop-blur-sm transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-200/80"
+                className="mt-6 w-full rounded-xl border border-white/20 bg-white/10 py-3 text-sm font-medium text-white transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-200/80"
               >
                 Cerrar
               </button>
