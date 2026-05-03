@@ -7,7 +7,7 @@ import { TogetherCounter } from './components/TogetherCounter'
 
 export default function App() {
   return (
-    <div className="min-h-dvh overflow-x-hidden bg-stone-950 text-stone-100 antialiased">
+    <div className="min-h-svh overflow-x-hidden bg-stone-950 text-stone-100 antialiased">
       <BootLoader>
         <>
           <EasterEgg />

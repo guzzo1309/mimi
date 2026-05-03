@@ -1,15 +1,21 @@
 import confetti from 'canvas-confetti'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { useCallback, useRef, useState } from 'react'
 import { EASTER_EGG_MESSAGE } from '../config/site'
 
 const TRIPLE_MS = 700
 
 export function EasterEgg() {
+  const reduceMotion = useReducedMotion()
   const [open, setOpen] = useState(false)
   const taps = useRef<number[]>([])
 
   const trigger = useCallback(() => {
+    if (reduceMotion) {
+      setOpen(true)
+      return
+    }
+
     const end = Date.now() + 1600
     const colors = ['#fda4af', '#fde68a', '#c4b5fd', '#ffffff']
 
@@ -32,7 +38,7 @@ export function EasterEgg() {
     }
     frame()
     setOpen(true)
-  }, [])
+  }, [reduceMotion])
 
   const onMonogramTap = useCallback(() => {
     const now = Date.now()
@@ -43,6 +49,10 @@ export function EasterEgg() {
       trigger()
     }
   }, [trigger])
+
+  const panelEnter = reduceMotion ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 16, scale: 0.96 }
+  const panelExit = reduceMotion ? { opacity: 0, y: 0 } : { opacity: 0, y: 8 }
+  const panelTrans = reduceMotion ? { duration: 0 } : { type: 'spring' as const, stiffness: 420, damping: 32 }
 
   return (
     <>
@@ -61,9 +71,10 @@ export function EasterEgg() {
             key="easter"
             role="status"
             className="fixed inset-x-4 bottom-24 z-40 mx-auto max-w-md rounded-2xl border border-rose-200/30 bg-stone-950 p-5 text-center shadow-2xl sm:inset-x-auto sm:bg-stone-900/95 sm:backdrop-blur-md"
-            initial={{ opacity: 0, y: 16, scale: 0.96 }}
+            initial={panelEnter}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 8 }}
+            exit={panelExit}
+            transition={panelTrans}
           >
             <p className="font-display text-lg leading-relaxed text-rose-50">
               {EASTER_EGG_MESSAGE}

@@ -1,6 +1,7 @@
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { BOOT_LOADER_PHRASE, HERO_IMAGE_URL, POLAROIDS } from '../config/site'
+import { preloadUrlsForImage } from '../lib/responsiveImage'
 
 function preloadImage(src: string): Promise<void> {
   return new Promise((resolve) => {
@@ -12,6 +13,7 @@ function preloadImage(src: string): Promise<void> {
 }
 
 export function BootLoader({ children }: { children: React.ReactNode }) {
+  const reduceMotion = useReducedMotion()
   const [showApp, setShowApp] = useState(false)
   const [exitOverlay, setExitOverlay] = useState(false)
   const [overlayMounted, setOverlayMounted] = useState(true)
@@ -27,7 +29,10 @@ export function BootLoader({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     document.documentElement.classList.add('boot-lock')
 
-    const urls = [HERO_IMAGE_URL, ...POLAROIDS.map((p) => p.src)]
+    const urls = [
+      ...preloadUrlsForImage(HERO_IMAGE_URL),
+      ...POLAROIDS.flatMap((p) => preloadUrlsForImage(p.src)),
+    ]
     const imagesReady = Promise.all(urls.map(preloadImage))
     const deadline = new Promise<void>((r) => {
       window.setTimeout(r, 12_000)
@@ -59,18 +64,26 @@ export function BootLoader({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!exitOverlay) return
-    const fallback = window.setTimeout(finishBoot, 900)
+    const delay = reduceMotion ? 0 : 900
+    const fallback = window.setTimeout(finishBoot, delay)
     return () => window.clearTimeout(fallback)
-  }, [exitOverlay, finishBoot])
+  }, [exitOverlay, finishBoot, reduceMotion])
+
+  const appFade = reduceMotion
+    ? { duration: 0 }
+    : { duration: 0.48, ease: [0.22, 1, 0.36, 1] as const, delay: 0.06 }
+  const overlayFade = reduceMotion
+    ? { duration: 0.12 }
+    : { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const }
 
   return (
     <>
       {showApp ? (
         <motion.div
-          initial={{ opacity: 0 }}
+          initial={{ opacity: reduceMotion ? 1 : 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.48, ease: [0.22, 1, 0.36, 1], delay: 0.06 }}
-          className="min-h-dvh"
+          transition={appFade}
+          className="min-h-svh"
         >
           {children}
         </motion.div>
@@ -83,7 +96,7 @@ export function BootLoader({ children }: { children: React.ReactNode }) {
           aria-busy={!exitOverlay}
           initial={false}
           animate={{ opacity: exitOverlay ? 0 : 1 }}
-          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          transition={overlayFade}
           onAnimationComplete={() => {
             if (exitOverlay) finishBoot()
           }}
@@ -96,13 +109,17 @@ export function BootLoader({ children }: { children: React.ReactNode }) {
             aria-hidden
             animate={
               exitOverlay
-                ? { scale: 1, opacity: 0.35 }
-                : { scale: [1, 1.12, 1], opacity: [1, 0.92, 1] }
+                ? { opacity: 0.35 }
+                : reduceMotion
+                  ? { opacity: 1 }
+                  : { opacity: [1, 0.72, 1] }
             }
             transition={
               exitOverlay
-                ? { duration: 0.35 }
-                : { duration: 1.15, repeat: Infinity, ease: 'easeInOut' }
+                ? { duration: reduceMotion ? 0 : 0.35 }
+                : reduceMotion
+                  ? { duration: 0 }
+                  : { duration: 1.15, repeat: Infinity, ease: 'easeInOut' }
             }
           >
             ♥
@@ -110,7 +127,6 @@ export function BootLoader({ children }: { children: React.ReactNode }) {
           <p className="max-w-xs font-display text-lg leading-relaxed text-balance text-stone-200 sm:max-w-sm sm:text-xl">
             {BOOT_LOADER_PHRASE}
           </p>
-          <p className="font-sans text-xs text-stone-500">Cargando fotos y tipografías…</p>
         </motion.div>
       ) : null}
     </>
