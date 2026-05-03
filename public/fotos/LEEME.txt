@@ -1,0 +1,7 @@
+Las rutas de las fotos están en src/config/site.ts.
+
+Las que venían en .HEIC del iPhone tienen copia en .jpg (mismo nombre, extensión .jpg) para que carguen en Chrome y en todos los navegadores.
+
+Puedes borrar los .HEIC si ya no los necesitas (opcional, ocupan más espacio).
+
+Hero: src/config/urls.ts
