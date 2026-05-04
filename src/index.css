@@ -49,3 +49,24 @@ body {
   border-radius: 999px;
 }
 
+@keyframes constellation-drift {
+  0%,
+  100% {
+    opacity: 0.88;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.constellation-drift {
+  animation: constellation-drift 7s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .constellation-drift {
+    animation: none;
+    opacity: 1;
+  }
+}
+

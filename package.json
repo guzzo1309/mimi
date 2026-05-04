@@ -12,6 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "astronomy-engine": "^2.1.19",
     "canvas-confetti": "^1.9.4",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.38.0",

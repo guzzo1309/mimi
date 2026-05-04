@@ -38,6 +38,28 @@ export const EASTER_EGG_MESSAGE =
 export const BOOT_LOADER_PHRASE =
   'Preparando cada recuerdo para ti… solo un latido más.'
 
+/**
+ * Aparece al final del scroll (una sola vez al entrar en vista). Cierra el arco del sitio.
+ * Editá el texto a lo que quieras que lea solo ella.
+ */
+export const CLOSING_SURPRISE_LINE =
+  'Si llegaste hasta aquí: esto no es código, es la forma en que te digo que sigo eligiendo este camino. Siempre.'
+
+/**
+ * Bloque entre polaroids y el muro de razones. Editá el copy; es el “extra” después de las fotos.
+ */
+export const POST_GALLERY_KICKER = 'Cuando las fotos se quedan atrás'
+
+export const POST_GALLERY_TITLE = 'Siguen las palabras'
+
+export const POST_GALLERY_BODY =
+  'Las polaroids guardan instantes. Lo que viene abajo es otro tipo de memoria: frases que escribí para ti, como notas que no se borran con el tiempo.'
+
+/** Contador tonto de besos (solo `localStorage` en este dispositivo). */
+export const KISS_COUNTER_TITLE = 'Besos en este dispositivo'
+
+export const KISS_COUNTER_HINT = 'Cada toque suma uno. Nadie más lo ve.'
+
 export type Polaroid = {
   id: string
   src: string

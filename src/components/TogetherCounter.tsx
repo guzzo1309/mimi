@@ -1,6 +1,7 @@
 import { intervalToDuration } from 'date-fns'
 import { useEffect, useState } from 'react'
 import { RELATIONSHIP_START, relationshipStartLabel } from '../config/site'
+import { KissCounter } from './KissCounter'
 
 type DurationParts = {
   years: number
@@ -43,28 +44,32 @@ function Unit({
 }
 
 export function TogetherCounter() {
-  const [parts, setParts] = useState<DurationParts>(() => computeParts(new Date()))
+  const [now, setNow] = useState(() => new Date())
 
   useEffect(() => {
     const id = window.setInterval(() => {
-      setParts(computeParts(new Date()))
+      setNow(new Date())
     }, 1000)
     return () => window.clearInterval(id)
   }, [])
 
+  const parts = computeParts(now)
+
   return (
-    <footer className="relative bg-linear-to-b from-stone-950 to-black pb-16 pt-12">
-      <div className="mx-auto max-w-5xl px-4 sm:px-6">
+    <footer className="relative border-t border-white/10 bg-linear-to-b from-stone-950 via-black to-black pb-24 pt-16 md:pb-28 md:pt-20">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_45%_at_50%_0%,rgba(251,191,36,0.06),transparent_55%)]" />
+
+      <div className="relative mx-auto max-w-5xl px-4 sm:px-6">
         <div className="text-center">
-          <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl">
+          <h2 className="font-display text-2xl font-semibold text-white sm:text-3xl md:text-4xl">
             Llevamos exactamente…
           </h2>
-          <p className="mt-2 px-1 text-sm text-balance text-stone-500">
+          <p className="mt-3 px-1 text-sm text-balance text-stone-500 sm:text-base">
             Desde {relationshipStartLabel()}
           </p>
         </div>
 
-        <div className="mx-auto mt-10 flex w-full max-w-4xl flex-nowrap items-stretch justify-center gap-1 sm:gap-2.5 md:gap-3">
+        <div className="mx-auto mt-12 flex w-full max-w-4xl flex-nowrap items-stretch justify-center gap-1 sm:mt-14 sm:gap-2.5 md:gap-3">
           <Unit label="Años" value={parts.years} />
           <Unit label="Meses" value={parts.months} />
           <Unit label="Días" value={parts.days} />
@@ -73,9 +78,7 @@ export function TogetherCounter() {
           <Unit label="Seg" value={parts.seconds} />
         </div>
 
-        <p className="mt-10 px-2 text-center font-display text-sm text-balance italic text-stone-500">
-          Cada segundo desde ese 4 de abril a las 12:27. Gracias por este tiempo.
-        </p>
+        <KissCounter />
       </div>
     </footer>
   )

@@ -1,6 +1,16 @@
 import { motion, useReducedMotion } from 'framer-motion'
 import { CAROUSEL_PHRASES } from '../config/site'
 
+/** Centra la primera y última tarjeta al hacer snap en móvil. */
+function CarouselSpacer() {
+  return (
+    <div
+      className="pointer-events-none shrink-0 snap-none max-sm:w-[max(0px,calc((100vw-min(32rem,calc(100vw-2rem)))/2))] sm:hidden"
+      aria-hidden
+    />
+  )
+}
+
 export function ReasonsCarousel() {
   const reduceMotion = useReducedMotion()
 
@@ -27,25 +37,30 @@ export function ReasonsCarousel() {
           </p>
         </motion.header>
 
-        <div className="snap-x-muted flex snap-x snap-mandatory gap-3 overflow-x-auto overflow-y-hidden scroll-px-4 px-3 pb-3 [-webkit-overflow-scrolling:touch] sm:gap-4 sm:px-4">
-          {CAROUSEL_PHRASES.map((phrase, i) => (
-            <motion.article
-              key={i}
-              className="box-border w-[min(22rem,calc(100dvw-2.5rem))] shrink-0 snap-center rounded-2xl border border-white/15 bg-white/12 p-5 shadow-xl sm:w-[26rem] sm:rounded-3xl sm:bg-white/10 sm:p-8 sm:backdrop-blur-md md:p-10"
-              initial={reduceMotion ? { opacity: 1, x: 0 } : { opacity: 0, x: 16 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.25 }}
-              transition={
-                reduceMotion
-                  ? { duration: 0 }
-                  : { delay: i * 0.03, duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }
-              }
-            >
-              <p className="font-display text-base leading-relaxed text-pretty text-stone-100 sm:text-lg md:text-xl">
-                {phrase}
-              </p>
-            </motion.article>
-          ))}
+        {/* Sangría solo en móvil: el carril usa el ancho del viewport y espaciadores centran cada snap */}
+        <div className="max-sm:-mx-4">
+          <div className="snap-x-muted flex snap-x snap-mandatory gap-3 overflow-x-auto overflow-y-hidden pb-3 [-webkit-overflow-scrolling:touch] sm:gap-4 sm:overflow-x-auto sm:pb-3">
+            <CarouselSpacer />
+            {CAROUSEL_PHRASES.map((phrase, i) => (
+              <motion.article
+                key={i}
+                className="box-border w-[min(32rem,calc(100vw-2rem))] shrink-0 snap-center rounded-2xl border border-white/15 bg-white/12 p-6 shadow-xl sm:w-[28rem] sm:rounded-3xl sm:bg-white/10 sm:p-8 sm:backdrop-blur-md md:w-[30rem] md:p-10"
+                initial={reduceMotion ? { opacity: 1, x: 0 } : { opacity: 0, x: 16 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, amount: 0.25 }}
+                transition={
+                  reduceMotion
+                    ? { duration: 0 }
+                    : { delay: i * 0.03, duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }
+                }
+              >
+                <p className="font-display text-base leading-relaxed text-pretty text-stone-100 sm:text-lg md:text-xl">
+                  {phrase}
+                </p>
+              </motion.article>
+            ))}
+            <CarouselSpacer />
+          </div>
         </div>
       </div>
     </section>
